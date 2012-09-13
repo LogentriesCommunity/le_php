@@ -31,6 +31,8 @@ To use it in your code, enter the following lines, making changes accordingly if
 	
 	$log->Info("Hello Logentries, I'm an Info message");
 
+Config Setup
+-------------
 Two parameters need to be filled in here, `loggerName` and `logToken`.
 
 loggerName is the name of that particular logger which is for your benefit should you choose to have more than one.
