@@ -27,14 +27,36 @@ To use it in your code, enter the following lines, making changes accordingly if
 
 	require_once dirname(__FILE__) . '/LeLogger-0.1/LeLogger.php';
 
-	$log = LeLogger::getLogger('loggerName', 'logToken');
+	$log = LeLogger::getLogger('loggerName', 'logToken', opt_tcp, opt_severity);
 	
 	$log->Info("Hello Logentries, I'm an Info message");
 
-Config Setup
--------------
+Parameter Setup
+---------------
 Two parameters need to be filled in here, `loggerName` and `logToken`.
 
 loggerName is the name of that particular logger which is for your benefit should you choose to have more than one.
 
 logToken is the token we copied earlier from the Logentries UI. It associates that logger with the log file on Logentries.
+
+
+Optional Parameters
+-------------------
+
+Both `opt_tcp` and `opt_severity` are optional. 
+
+`opt_tcp` is a boolean indicating whether you would like to use tcp over udp. It is false by default and may affect response time as logging takes place in-process.
+
+`opt_severity` lets you set a minimum severity for this logger. Is is set to DEBUG by default which allows all messages to be sent. The choices for this are:
+
+	LeLogger::ERROR
+	LeLogger::WARN
+	LeLogger::NOTICE
+	LeLogger::INFO
+	LeLogger::DEBUG
+
+Note
+----
+
+Be sure to conform to Php rules when using the optional parameters. If you wish to set severity, you must also place true or false for `opt_tcp`
+

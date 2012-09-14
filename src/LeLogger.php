@@ -49,7 +49,7 @@ class LeLogger
 	
 	private static $instances = array();
 
-	public static function getLogger($loggerName, $token, $severity=false)
+	public static function getLogger($loggerName, $token, $use_tcp=false, $severity=false)
 	{
 		if ($severity === false)
 		{
@@ -60,19 +60,19 @@ class LeLogger
 			return self::$instances[$loggerName];
 		}
 
-		self::$instances[$loggerName] = new self($loggerName, $token, $severity);
+		self::$instances[$loggerName] = new self($loggerName, $token, $use_tcp, $severity);
 
 		return self::$instances[$loggerName];
 	}
 
-	private function __construct($loggerName, $token, $severity)
+	private function __construct($loggerName, $token, $use_tcp, $severity)
 	{
 		$this->_logToken = $token;		
 
 		$this->_severityThreshold = $severity;
 
 		//Make socket
-		$this->_createSocket();
+		$this->_createSocket($use_tcp);
 	}
 
 	public function __destruct()
@@ -83,9 +83,15 @@ class LeLogger
 		}
 	}
 
-	public function _createSocket()
+	public function _createSocket($use_tcp)
 	{
-		$this->_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		if ($use_tcp === true)
+		{
+			$this->_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		}
+		else{
+			$this->_socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+		}
 		
 		if ($this->_socket === false)
 		{
@@ -102,6 +108,8 @@ class LeLogger
 			$this->_socketStatus = self::STATUS_SOCKET_FAILED;
 			return;
 		}
+	
+		socket_set_nonblock($this->_socket);
 
 		$this->_socketStatus = self::STATUS_SOCKET_OPEN;
 	}
