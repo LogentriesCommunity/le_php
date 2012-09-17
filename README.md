@@ -20,7 +20,7 @@ library will use to access that logfile. You can copy and paste this now or late
 
 Parameter Setup
 ---------------
-In `logentries.php` you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
+Inside the `LeLogger-0.1` folder, open `logentries.php` as you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
 
 `LOGGER_NAME` is the name of that particular logger which is for your benefit should you choose to have more than one.
 
