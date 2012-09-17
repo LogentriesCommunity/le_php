@@ -18,17 +18,6 @@ and click Register. You will notice a token appear beside the name of the log, t
 
 library will use to access that logfile. You can copy and paste this now or later.
 
-Code Setup
-----------
-
-Now you need to download the library from the Downloads Tab, unzip and place the folder in your apps directory.
-
-To use it in your code, enter the following lines, making changes accordingly if you place it in a different location.
-
-	require dirname(__FILE__) . '/LeLogger-0.1/logentries.php';
-	
-	$log->Info("Hello Logentries, I'm an Info message");
-
 Parameter Setup
 ---------------
 In `logentries.php` you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
@@ -52,6 +41,19 @@ You can also enter a third and fourth parameter called `opt_tcp` and `opt_severi
 	LeLogger::NOTICE
 	LeLogger::INFO
 	LeLogger::DEBUG
+
+
+Code Setup
+----------
+
+Now you need to download the library from the Downloads Tab, unzip and place the folder in your apps directory.
+
+To use it in your code, enter the following lines, making changes accordingly if you place it in a different location.
+
+	require dirname(__FILE__) . '/LeLogger-0.1/logentries.php';
+	
+	$log->Info("Hello Logentries, I'm an Info message");
+
 
 Note
 ----
