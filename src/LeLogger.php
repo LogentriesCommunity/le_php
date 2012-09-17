@@ -72,7 +72,11 @@ class LeLogger
 		$this->_severityThreshold = $severity;
 
 		//Make socket
-		$this->_createSocket($use_tcp);
+		try{
+			$this->_createSocket($use_tcp);
+		}catch(Exception $ex){
+			echo "Error connecting to Logentries, reason: " . $ex->getMessage();
+		}
 	}
 
 	public function __destruct()

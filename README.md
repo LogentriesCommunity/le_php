@@ -25,25 +25,23 @@ Now you need to download the library from the Downloads Tab, unzip and place the
 
 To use it in your code, enter the following lines, making changes accordingly if you place it in a different location.
 
-	require_once dirname(__FILE__) . '/LeLogger-0.1/LeLogger.php';
-
-	$log = LeLogger::getLogger('loggerName', 'logToken', opt_tcp, opt_severity);
+	require dirname(__FILE__) . '/LeLogger-0.1/logentries.php';
 	
 	$log->Info("Hello Logentries, I'm an Info message");
 
 Parameter Setup
 ---------------
-Two parameters need to be filled in here, `loggerName` and `logToken`.
+In `logentries.php` you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
 
-loggerName is the name of that particular logger which is for your benefit should you choose to have more than one.
+`LOGGER_NAME` is the name of that particular logger which is for your benefit should you choose to have more than one.
 
-logToken is the token we copied earlier from the Logentries UI. It associates that logger with the log file on Logentries.
+`LOGENTRIES_TOKEN` is the token we copied earlier from the Logentries UI. It associates that logger with the log file on Logentries.
 
 
 Optional Parameters
 -------------------
 
-Both `opt_tcp` and `opt_severity` are optional. 
+You can also enter a third and fourth parameter called `opt_tcp` and `opt_severity`.
 
 `opt_tcp` is a boolean indicating whether you would like to use tcp over udp. It is false by default and setting to true may have an impact response time as logging takes place in-process.
 
