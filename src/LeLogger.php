@@ -49,7 +49,7 @@ class LeLogger
 	
 	private static $instances = array();
 
-	public static function getLogger($loggerName, $token, $use_tcp=false, $severity=false)
+	public static function getLogger($loggerName, $token, $use_tcp=true, $severity=false)
 	{
 		if ($severity === false)
 		{
