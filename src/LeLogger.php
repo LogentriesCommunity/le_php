@@ -51,6 +51,11 @@ class LeLogger
 
 	public static function getLogger($loggerName, $token, $use_tcp=true, $severity=false)
 	{
+		if ($loggerName === "")
+		{
+			return;
+		}
+
 		if ($severity === false)
 		{
 			$severity = self::DEBUG;
