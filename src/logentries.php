@@ -1,15 +1,11 @@
 <?php
 
 	require_once('LeLogger.php');
-
-	/*
-	*  LOGENTRIES_TOKEN must be set to a logfile token obtained from Logentries UI, if not using ENV_TOKEN
-	*/
 	
 	$LOGENTRIES_TOKEN = "";
 	
 	/*
-	*  LOGENTRIES_TOKEN must be set to a logfile token obtained from Logentries UI, if not using ENV_TOKEN
+	*  LOGENTRIES_TOKEN must be set to a logfile token obtained from Logentries, if not using ENV_TOKEN
 	*/
 	
 	// Ignore this, used for PaaS that support configuration variables
