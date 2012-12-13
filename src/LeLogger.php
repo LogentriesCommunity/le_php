@@ -12,7 +12,7 @@
 *   https://github.com/katzgrau/KLogger.git
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
-* @version 0.1
+* @version 1.2
 */
 
 class LeLogger 
