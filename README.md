@@ -20,7 +20,9 @@ library will use to access that logfile. You can copy and paste this now or late
 
 Parameter Setup
 ---------------
-Inside the `LeLogger-1.2` folder, open `logentries.php` as you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
+Download this repo as a ZIP file and unzip it into your app's directroy.
+
+Inside the `le_php-master` folder, open `logentries.php` as you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
 
 `LOGGER_NAME` is the name of that particular logger which is for your benefit should you choose to have more than one.
 
@@ -50,7 +52,7 @@ Now you need to download the library from the Downloads Tab, unzip and place the
 
 To use it in your code, enter the following lines, making changes accordingly if you place it in a different location.
 
-	require dirname(__FILE__) . '/LeLogger-1.2/logentries.php';
+	require dirname(__FILE__) . '/le_php-master/logentries.php';
 	
 	$log->Info("Hello Logentries, I'm an Info message");
 
