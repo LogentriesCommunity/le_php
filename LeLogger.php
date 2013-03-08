@@ -175,12 +175,12 @@ class LeLogger
 		$this->log($line, self::NOTICE);
 	}
 
-	public function log($line, $severity)
+	public function log($line, $curr_severity)
 	{
 		$this->connectIfNotConnected();
 
-		if ($this->_severityThreshold >= $severity) {
-			$prefix = $this->_getTime($severity);
+		if ($this->severity >= $curr_severity) {
+			$prefix = $this->_getTime($curr_severity);
 
 			$data = $prefix . $line . PHP_EOL;
 
