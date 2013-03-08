@@ -22,27 +22,9 @@ Parameter Setup
 ---------------
 Download this repo as a ZIP file and unzip it into your app's directroy.
 
-Inside the `le_php-master` folder, open `logentries.php` as you need to fill in two parameters, `LOGGER_NAME` and `LOGENTRIES_TOKEN`.
-
-`LOGGER_NAME` is the name of that particular logger which is for your benefit should you choose to have more than one.
+Inside the `le_php-master` folder, open `logentries.php` as you need to fill in a parameter, `LOGENTRIES_TOKEN`.
 
 `LOGENTRIES_TOKEN` is the token we copied earlier from the Logentries UI. It associates that logger with the log file on Logentries.
-
-
-Optional Parameters
--------------------
-
-You can also enter a third and fourth parameter called `opt_tcp` and `opt_severity`.
-
-`opt_tcp` is a boolean indicating whether you would like to use tcp over udp. It is true by default however it may have an impact on response time as logging takes place in-process.
-
-`opt_severity` lets you set a minimum severity for this logger. Is is set to DEBUG by default which allows all messages to be sent. The choices for this are:
-
-	LeLogger::ERROR
-	LeLogger::WARN
-	LeLogger::NOTICE
-	LeLogger::INFO
-	LeLogger::DEBUG
 
 
 Code Setup
@@ -55,10 +37,3 @@ To use it in your code, enter the following lines, making changes accordingly if
 	require dirname(__FILE__) . '/le_php-master/logentries.php';
 	
 	$log->Info("Hello Logentries, I'm an Info message");
-
-
-Note
-----
-
-Be sure to conform to Php rules when using the optional parameters. If you wish to set `opt_severity`, you must also place true or false for `opt_tcp`
-
