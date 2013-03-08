@@ -2,12 +2,24 @@
 
 	require_once('LeLogger.php');
 	
-	$LOGENTRIES_TOKEN = "";
-	
 	/*
-	*  LOGENTRIES_TOKEN must be set to a logfile token obtained from Logentries, if not using ENV_TOKEN
-	*/
+	 *  User - Defined Variables
+	 */
+
+	$LOGENTRIES_TOKEN = "";
+
+	// Whether the socket is persistent or not
+	$Persistent = true;
+
+	// Whether the socket uses SSL/TLS or not
+	$SSL = false;
 	
+	// Set the minimum severity of events to send
+	$Severity = LeLogger::DEBUG;
+	/*
+	 *  END  User - Defined Variables
+	 */
+
 	// Ignore this, used for PaaS that support configuration variables
 	$ENV_TOKEN = getenv('LOGENTRIES_TOKEN');
 	
@@ -17,5 +29,5 @@
 		$LOGENTRIES_TOKEN = $ENV_TOKEN;
 	}
 	
-	$log = LeLogger::getLogger('LOGGER_NAME', $LOGENTRIES_TOKEN);
+	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity);
 ?>

@@ -4,7 +4,7 @@
 * Logging library for use with Logentries
 *
 * Usage:
-* $log = LeLogger::getLogger('mylogger', 'ad43g-dfd34-df3ed-3d3d3');
+* $log = LeLogger::getLogger('ad43g-dfd34-df3ed-3d3d3');
 * $log->Info("I'm an informational message");
 * $log->Warn("I'm a warning message");
 *
@@ -12,7 +12,7 @@
 *   https://github.com/katzgrau/KLogger.git
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
-* @version 1.2
+* @version 1.3
 */
 
 class LeLogger 
@@ -24,103 +24,130 @@ class LeLogger
 	const INFO = 3;
 	const DEBUG = 4;
 
-	const STATUS_SOCKET_OPEN = 1;
-	const STATUS_SOCKET_FAILED = 2;
-	const STATUS_SOCKET_CLOSED = 3;
-
 	// Logentries server address for receiving logs
-	const LE_ADDRESS = 'api.logentries.com';
+	const LE_ADDRESS = 'tcp://api.logentries.com';
+	// Logentries server address for receiving logs via TLS
+	const LE_TLS_ADDRESS = 'tls://api.logentries.com';
 	// Logentries server port for receiving logs by token
 	const LE_PORT = 10000;
+	// Logentries server port for receiving logs with TLS by token
+	const LE_TLS_PORT = 20000;
 
-	private $_socket = null;
-
-	private $_socketStatus = self::STATUS_SOCKET_CLOSED;
-
-	private $_defaultSeverity = self::DEBUG;
-
-	private $_severityThreshold = self::INFO;
-
-	private $_loggerName = null;
+	private $resource = null;
 
 	private $_logToken = null;
+
+	private $severity = DEBUG;
+
+	private $connectionTimeout;
+
+	private $persistent = true;
+
+	private $use_ssl = false;
 	
 	private static $_timestampFormat = 'Y-m-d G:i:s';
 	
-	private static $instances = array();
+	private static $m_instance;
 
-	public static function getLogger($loggerName, $token, $use_tcp=true, $severity=false)
-	{
-		if ($loggerName === "")
-		{
-			return;
-		}
-
-		if ($severity === false)
-		{
-			$severity = self::DEBUG;
-		}
+	private $errno;
 	
-		if (in_array($loggerName, self::$instances)) {
-			return self::$instances[$loggerName];
+	private $errstr;
+
+	public static function getLogger($token, $persistent, $ssl, $severity)
+	{	
+		if (!self::$m_instance)
+		{
+			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity);
 		}
 
-		self::$instances[$loggerName] = new self($loggerName, $token, $use_tcp, $severity);
-
-		return self::$instances[$loggerName];
+		return self::$m_instance;
 	}
 
-	private function __construct($loggerName, $token, $use_tcp, $severity)
+	private function __construct($token, $persistent, $use_ssl, $severity)
 	{
 		$this->_logToken = $token;		
 
-		$this->_severityThreshold = $severity;
+		$this->persistent = $persistent;
 
-		//Make socket
-		try{
-			$this->_createSocket($use_tcp);
-		}catch(Exception $ex){
-			echo "Error connecting to Logentries, reason: " . $ex->getMessage();
-		}
+		$this->use_ssl = $use_ssl;
+
+		$this->severity = $severity;
+
+		$this->connectionTimeout = (float) ini_get('default_socket_timeout');
 	}
 
 	public function __destruct()
 	{
-		if ($this->_socket != null) {
-			socket_close($this->_socket);
-			$this->_socketStatus = self::STATUS_SOCKET_CLOSED;
+		$this->closeSocket();
+	}
+
+	public function closeSocket()
+	{
+		if (is_resource($this->resource)){
+			fclose($this->resource);
+			$this->resource = null;
 		}
 	}
 
-	public function _createSocket($use_tcp)
+	public function isPersistent()
 	{
-		if ($use_tcp === true)
-		{
-			$this->_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		}
-		else{
-			$this->_socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-		}
-		
-		if ($this->_socket === false)
-		{
-			echo "Could not create socket for Logentries Logger, reason: " . socket_strerror(socket_last_error()) . "\n";
-			$this->_socketStatus = self::STATUS_SOCKET_FAILED;
-			return;
-		}
+		return $this->persistent;
+	}
 
-		$result = socket_connect($this->_socket, self::LE_ADDRESS, self::LE_PORT);
+	public function isTLS()
+	{
+		return $this->use_ssl;
+	}
 
-		if ($result === false)
+	public function getPort()
+	{
+		if ($this->isTLS())
 		{
-			echo "Could not connect to Logentries, reason: " . socket_strerror(socket_last_error()) . "\n";
-			$this->_socketStatus = self::STATUS_SOCKET_FAILED;
-			return;
+			return self::LE_TLS_PORT;
+		}else{
+			return self::LE_PORT;
 		}
-	
-		socket_set_nonblock($this->_socket);
+	}
 
-		$this->_socketStatus = self::STATUS_SOCKET_OPEN;
+	public function getAddress()
+	{
+		if ($this->isTLS())
+		{
+			return self::LE_TLS_ADDRESS;
+		}else{
+			return self::LE_ADDRESS;
+		}
+	}
+
+	public function isConnected()
+	{
+		return is_resource($this->resource) && !feof($this->resource);
+	}
+
+	private function createSocket()
+	{
+		$port = $this->getPort();
+		$address = $this->getAddress();
+		if ($this->isPersistent())
+		{
+			$resource = $this->pfsockopen($port, $address);
+		}else{
+			$resource = $this->fsockopen($port, $address);
+		}
+		if (!$resource) {
+			throw new \UnexpectedValueException("Failed to connect to Logentries ($this->errno: $this->errstr)");
+		}
+		$this->resource = $resource;
+	}
+
+	private function my_pfsockopen($port, $address)
+	{
+         return pfsockopen($address, $port, $this->errno, $this->errstr, $this->connectionTimeout);
+	}
+
+	private function my_fsockopen($port, $address)
+	{
+		return fsockopen($address, $port, $this->errno, $this->errstr, $this->connectionTimeout);
 	}
 
 	public function Debug($line)
@@ -150,27 +177,37 @@ class LeLogger
 
 	public function log($line, $severity)
 	{
-		if ($this->_socket === null)
-		{
-			$this->_createSocket();
-		}
+		$this->connectIfNotConnected();
 
 		if ($this->_severityThreshold >= $severity) {
 			$prefix = $this->_getTime($severity);
 
-			$line = $prefix . $line;
+			$data = $prefix . $line . PHP_EOL;
 
-			$this->writeToSocket($line . PHP_EOL);
+			$this->writeToSocket($data);
 		}
 	}
 
 	public function writeToSocket($line)
 	{
-		if ($this->_socketStatus == self::STATUS_SOCKET_OPEN)
+		$finalLine = $this->_logToken . $line;
+		if($this->isConnected())
 		{
-			$finalLine = $this->_logToken . $line;
-			socket_write($this->_socket, $finalLine, strlen($finalLine));	
+			fputs($this->resource, $finalLine);
 		}
+	}
+
+	private function connectIfNotConnected()
+	{
+		if ($this->isConnected()){
+			return;
+		}
+		$this->connect();
+	}
+
+	private function connect()
+	{
+		$this->createSocket();
 	}
 
 	private function _getTime($level)
