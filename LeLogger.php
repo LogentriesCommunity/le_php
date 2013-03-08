@@ -37,11 +37,11 @@ class LeLogger
 
 	private $_logToken = null;
 
-	private $severity = DEBUG;
+	private $severity = self::DEBUG;
 
 	private $connectionTimeout;
 
-	private $persistent = true;
+	private $persistent = false;
 
 	private $use_ssl = false;
 	
@@ -130,9 +130,9 @@ class LeLogger
 		$address = $this->getAddress();
 		if ($this->isPersistent())
 		{
-			$resource = $this->pfsockopen($port, $address);
+			$resource = $this->my_pfsockopen($port, $address);
 		}else{
-			$resource = $this->fsockopen($port, $address);
+			$resource = $this->my_fsockopen($port, $address);
 		}
 		if (!$resource) {
 			throw new \UnexpectedValueException("Failed to connect to Logentries ($this->errno: $this->errstr)");
