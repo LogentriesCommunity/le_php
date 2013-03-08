@@ -9,7 +9,7 @@
 	$LOGENTRIES_TOKEN = "";
 
 	// Whether the socket is persistent or not
-	$Persistent = false;
+	$Persistent = true;
 
 	// Whether the socket uses SSL/TLS or not
 	$SSL = false;

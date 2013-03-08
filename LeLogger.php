@@ -41,7 +41,7 @@ class LeLogger
 
 	private $connectionTimeout;
 
-	private $persistent = false;
+	private $persistent = true;
 
 	private $use_ssl = false;
 	
