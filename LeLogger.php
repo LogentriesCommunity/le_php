@@ -12,7 +12,7 @@
 *   https://github.com/katzgrau/KLogger.git
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
-* @version 1.3
+* @version 1.4
 */
 
 class LeLogger 
@@ -134,10 +134,9 @@ class LeLogger
 		}else{
 			$resource = $this->my_fsockopen($port, $address);
 		}
-		if (!$resource) {
-			throw new \UnexpectedValueException("Failed to connect to Logentries ($this->errno: $this->errstr)");
+		if (is_resource($resource) && !feof($resource)) {
+			$this->resource = $resource;
 		}
-		$this->resource = $resource;
 	}
 
 	private function my_pfsockopen($port, $address)
