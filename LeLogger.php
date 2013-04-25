@@ -13,7 +13,8 @@
 *   https://github.com/katzgrau/KLogger.git
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
-* @version 1.3.1
+*
+* @version 1.4
 */
 
 class LeLogger 
@@ -24,7 +25,7 @@ class LeLogger
 	 *  Alert
 	 *  Critical
 	 *  Error
- 	 *	Warning
+ 	 *  Warning
 	 *  Notice
 	 *  Info
 	 *  Debug
@@ -140,10 +141,9 @@ class LeLogger
 		}else{
 			$resource = $this->my_fsockopen($port, $address);
 		}
-		if (!$resource) {
-			throw new \UnexpectedValueException("Failed to connect to Logentries ($this->errno: $this->errstr)");
+		if (is_resource($resource) && !feof($resource)) {
+			$this->resource = $resource;
 		}
-		$this->resource = $resource;
 	}
 
 	private function my_pfsockopen($port, $address)
@@ -223,10 +223,11 @@ class LeLogger
 		if ($this->severity >= $curr_severity) {
 			$prefix = $this->_getTime($curr_severity);
 
-			$multiline = $this->substituteNewline($line);
+			//$multiline = $this->substituteNewline($line);
 
-			$data = $prefix . $multiline . PHP_EOL;
-			echo $data;
+			//$data = $prefix . $multiline . PHP_EOL;
+
+			$data = $prefix . PHP_EOL;
 
 			$this->writeToSocket($data);
 		}
@@ -241,13 +242,14 @@ class LeLogger
 		}
 	}
 
+/*
 	private function substituteNewline($line)
 	{
 		//$unicodeChar = '\u2028';
 
 		return str_replace(PHP_EOL, "\0x2028", $line);
 	}
-
+*/
 	private function connectIfNotConnected()
 	{
 		if ($this->isConnected()){
