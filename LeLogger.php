@@ -7,22 +7,28 @@
 * $log = LeLogger::getLogger('ad43g-dfd34-df3ed-3d3d3');
 * $log->Info("I'm an informational message");
 * $log->Warn("I'm a warning message");
+* $log->Warning("I'm also a warning message");
 *
 * Design inspired by KLogger library which is available at 
 *   https://github.com/katzgrau/KLogger.git
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
-* @version 1.3
+* @version 1.3.1
 */
 
 class LeLogger 
 {
-	//Some standard log levels
-	const ERROR = 0;
-	const WARN = 1;
-	const NOTICE = 2;
-	const INFO = 3;
-	const DEBUG = 4;
+	//BSD syslog log levels
+	/*
+	 *  Emergency
+	 *  Alert
+	 *  Critical
+	 *  Error
+ 	 *	Warning
+	 *  Notice
+	 *  Info
+	 *  Debug
+	 */
 
 	// Logentries server address for receiving logs
 	const LE_ADDRESS = 'tcp://api.logentries.com';
@@ -152,27 +158,62 @@ class LeLogger
 
 	public function Debug($line)
 	{
-		$this->log($line, self::DEBUG);
+		$this->log($line, LOG_DEBUG);
 	}
 
 	public function Info($line)
 	{
-		$this->log($line, self::INFO);
-	}
-
-	public function Warn($line)
-	{
-		$this->log($line, self::WARN);
-	}
-
-	public function Error($line)
-	{
-		$this->log($line, self::ERROR);
+		$this->log($line, LOG_INFO);
 	}
 
 	public function Notice($line)
 	{
-		$this->log($line, self::NOTICE);
+		$this->log($line, LOG_NOTICE);
+	}
+
+	public function Warning($line)
+	{
+		$this->log($line, LOG_WARNING);
+	}
+
+	public function Warn($line)
+	{
+		$this->log($line, LOG_WARNING);
+	}
+
+	public function Error($line)
+	{
+		$this->log($line, LOG_ERROR);
+	}
+
+	public function Err($line)
+	{
+		$this->log($line, LOG_ERROR);
+	}
+
+	public function Critical($line)
+	{
+		$this->log($line, LOG_CRIT);
+	}
+
+	public function Crit($line)
+	{
+		$this->log($line, LOG_CRIT);
+	}
+
+	public function Alert($line)
+	{
+		$this->log($line, LOG_ALERT);
+	}
+
+	public function Emergency($line)
+	{
+		$this->log($line, LOG_EMERG);
+	}
+
+	public function Emerg($line)
+	{
+		$this->log($line, LOG_EMERG);
 	}
 
 	public function log($line, $curr_severity)
@@ -182,7 +223,10 @@ class LeLogger
 		if ($this->severity >= $curr_severity) {
 			$prefix = $this->_getTime($curr_severity);
 
-			$data = $prefix . $line . PHP_EOL;
+			$multiline = $this->substituteNewline($line);
+
+			$data = $prefix . $multiline . PHP_EOL;
+			echo $data;
 
 			$this->writeToSocket($data);
 		}
@@ -195,6 +239,13 @@ class LeLogger
 		{
 			fputs($this->resource, $finalLine);
 		}
+	}
+
+	private function substituteNewline($line)
+	{
+		//$unicodeChar = '\u2028';
+
+		return str_replace(PHP_EOL, "\0x2028", $line);
 	}
 
 	private function connectIfNotConnected()
@@ -215,16 +266,22 @@ class LeLogger
 		$time = date(self::$_timestampFormat);
 
 		switch ($level) {
-			case self::INFO:
-				return "$time  INFO - ";
-			case self::WARN:
-				return "$time - WARN - ";
-			case self::ERROR:
-				return "$time - ERROR - ";
-			case self::NOTICE:
-				return "$time - NOTICE - ";
-			case self::DEBUG:
+			case LOG_DEBUG:
 				return "$time - DEBUG - ";
+			case LOG_INFO:
+				return "$time - INFO - ";
+			case LOG_NOTICE:
+				return "$time - NOTICE - ";
+			case LOG_WARNING:
+				return "$time - WARN - ";
+			case LOG_ERR:
+				return "$time - ERROR - ";
+			case LOG_CRIT:
+				return "$time - CRITICAL - ";
+			case LOG_ALERT:
+				return "$time - ALERT - ";
+			case LOG_EMERG:
+				return "$time - EMERGENCY - ";
 			default:
 				return "$time - LOG - ";
 		}

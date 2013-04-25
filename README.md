@@ -36,4 +36,12 @@ To use it in your code, enter the following lines, making changes accordingly if
 
 	require dirname(__FILE__) . '/le_php-master/logentries.php';
 	
-	$log->Info("Hello Logentries, I'm an Info message");
+	// The follow levels are available
+	$log->Debug(" ");
+	$log->Info(" ");
+	$log->Notice(" ");
+	$log->Warn(" ");
+	$log->Crit(" ");
+	$log->Error(" ");
+	$log->Alert(" ");
+	$log->Emerg(" ");
