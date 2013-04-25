@@ -227,7 +227,7 @@ class LeLogger
 
 			//$data = $prefix . $multiline . PHP_EOL;
 
-			$data = $prefix . PHP_EOL;
+			$data = $prefix . $line . PHP_EOL;
 
 			$this->writeToSocket($data);
 		}
