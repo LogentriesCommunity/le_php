@@ -36,7 +36,7 @@ To use it in your code, enter the following lines, making changes accordingly if
 
 	require dirname(__FILE__) . '/le_php-master/logentries.php';
 	
-	// The follow levels are available
+	// The following levels are available
 	$log->Debug(" ");
 	$log->Info(" ");
 	$log->Notice(" ");
