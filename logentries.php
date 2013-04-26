@@ -15,7 +15,7 @@
 	$SSL = false;
 	
 	// Set the minimum severity of events to send
-	$Severity = LeLogger::DEBUG;
+	$Severity = LOG_DEBUG;
 	/*
 	 *  END  User - Defined Variables
 	 */

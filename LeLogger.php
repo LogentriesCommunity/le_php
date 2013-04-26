@@ -44,7 +44,7 @@ class LeLogger
 
 	private $_logToken = null;
 
-	private $severity = self::DEBUG;
+	private $severity = LOG_DEBUG;
 
 	private $connectionTimeout;
 
@@ -183,12 +183,12 @@ class LeLogger
 
 	public function Error($line)
 	{
-		$this->log($line, LOG_ERROR);
+		$this->log($line, LOG_ERR);
 	}
 
 	public function Err($line)
 	{
-		$this->log($line, LOG_ERROR);
+		$this->log($line, LOG_ERR);
 	}
 
 	public function Critical($line)
