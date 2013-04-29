@@ -6,7 +6,7 @@
 	{
 		/**
 		 *	@expectedException PHPUnit_Framework_Error_Warning
-	     */
+		 */
 		public function testOneParameter()
 		{
 			$this->assertNotInstanceOf('LeLogger', LeLogger::getLogger('token'));
