@@ -73,7 +73,7 @@ class LeLogger
 	// Destroy singleton instance, used in PHPUnit tests
 	public static function tearDown()
 	{	
-		static::$m_instance = NULL;
+		self::$m_instance = NULL;
 	}
 
 	private function __construct($token, $persistent, $use_ssl, $severity)
