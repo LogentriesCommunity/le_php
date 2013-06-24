@@ -229,11 +229,11 @@ class LeLogger
 		if ($this->severity >= $curr_severity) {
 			$prefix = $this->_getTime($curr_severity);
 
-			//$multiline = $this->substituteNewline($line);
+			$multiline = $this->substituteNewline($line);
 
-			//$data = $prefix . $multiline . PHP_EOL;
+			$data = $prefix . $multiline . PHP_EOL;
 
-			$data = $prefix . $line . PHP_EOL;
+			//$data = $prefix . $line . PHP_EOL;
 
 			$this->writeToSocket($data);
 		}
@@ -248,14 +248,17 @@ class LeLogger
 		}
 	}
 
-/*
+
 	private function substituteNewline($line)
 	{
-		//$unicodeChar = '\u2028';
+		$unicodeChar = chr(13);
 
-		return str_replace(PHP_EOL, "\0x2028", $line);
+	 
+		$newLine = str_replace(PHP_EOL,$unicodeChar, $line);
+				 
+		return $newLine;
 	}
-*/
+
 	private function connectIfNotConnected()
 	{
 		if ($this->isConnected()){
