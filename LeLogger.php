@@ -14,7 +14,7 @@
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
 *
-* @version 1.4
+* @version 1.5
 */
 
 class LeLogger 
@@ -246,7 +246,7 @@ class LeLogger
 		}
 	}
 
-	
+
 	private function substituteNewline($line)
 	{
 		$unicodeChar = chr(13);
