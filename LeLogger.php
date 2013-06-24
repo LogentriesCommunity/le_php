@@ -233,8 +233,6 @@ class LeLogger
 
 			$data = $prefix . $multiline . PHP_EOL;
 
-			//$data = $prefix . $line . PHP_EOL;
-
 			$this->writeToSocket($data);
 		}
 	}
@@ -248,12 +246,11 @@ class LeLogger
 		}
 	}
 
-
+	
 	private function substituteNewline($line)
 	{
 		$unicodeChar = chr(13);
 
-	 
 		$newLine = str_replace(PHP_EOL,$unicodeChar, $line);
 				 
 		return $newLine;
