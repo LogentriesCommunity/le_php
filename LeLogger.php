@@ -14,7 +14,7 @@
 *
 * @author Mark Lacomber <marklacomber@gmail.com>
 *
-* @version 1.5
+* @version 1.6
 */
 
 class LeLogger 
@@ -32,9 +32,9 @@ class LeLogger
 	 */
 
 	// Logentries server address for receiving logs
-	const LE_ADDRESS = 'tcp://api.logentries.com';
+	const LE_ADDRESS = 'tcp://data.logentries.com';
 	// Logentries server address for receiving logs via TLS
-	const LE_TLS_ADDRESS = 'tls://api.logentries.com';
+	const LE_TLS_ADDRESS = 'tls://data.logentries.com';
 	// Logentries server port for receiving logs by token
 	const LE_PORT = 10000;
 	// Logentries server port for receiving logs with TLS by token
