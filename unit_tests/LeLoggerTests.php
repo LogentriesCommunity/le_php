@@ -76,13 +76,13 @@
 		{
 			$log = LeLogger::getLogger('token', true, false, LOG_DEBUG);
 
-			$this->assertEquals('tcp://data.logentries.com', $log->getAddress());
+			$this->assertEquals('tcp://api.logentries.com', $log->getAddress());
 
 			$this->tearDown();
 
 			$log = LeLogger::getLogger('token', true, true, LOG_DEBUG);
 
-			$this->assertEquals('tls://data.logentries.com', $log->getAddress());
+			$this->assertEquals('tls://api.logentries.com', $log->getAddress());
 		}
 
 		public function tearDown()
