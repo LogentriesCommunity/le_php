@@ -184,7 +184,7 @@ class LeLogger
 
 	public function Warn($line)
 	{
-		$this->log($line, LOG_WARNING);
+		$this->Warning($line);
 	}
 
 	public function Error($line)
@@ -194,7 +194,7 @@ class LeLogger
 
 	public function Err($line)
 	{
-		$this->log($line, LOG_ERR);
+		$this->Error($line);
 	}
 
 	public function Critical($line)
@@ -204,7 +204,7 @@ class LeLogger
 
 	public function Crit($line)
 	{
-		$this->log($line, LOG_CRIT);
+		$this->Critical($line);
 	}
 
 	public function Alert($line)
@@ -219,7 +219,7 @@ class LeLogger
 
 	public function Emerg($line)
 	{
-		$this->log($line, LOG_EMERG);
+		$this->Emergency($line);
 	}
 
 	public function log($line, $curr_severity)
