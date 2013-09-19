@@ -154,12 +154,12 @@ class LeLogger
 
 	private function my_pfsockopen($port, $address)
 	{
-         return pfsockopen($address, $port, $this->errno, $this->errstr, $this->connectionTimeout);
+         return @pfsockopen($address, $port, $this->errno, $this->errstr, $this->connectionTimeout);
 	}
 
 	private function my_fsockopen($port, $address)
 	{
-		return fsockopen($address, $port, $this->errno, $this->errstr, $this->connectionTimeout);
+		return @fsockopen($address, $port, $this->errno, $this->errstr, $this->connectionTimeout);
 	}
 
 	public function Debug($line)
