@@ -1,7 +1,5 @@
 <?php
 
-	require_once('../LeLogger.php');
-
 	class LeLoggerTest extends PHPUnit_Framework_TestCase
 	{
 		/**
