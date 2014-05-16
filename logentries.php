@@ -30,4 +30,3 @@
 	}
 	
 	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity);
-?>

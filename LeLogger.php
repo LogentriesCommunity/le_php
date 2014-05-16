@@ -78,6 +78,8 @@ class LeLogger
 
 	private function __construct($token, $persistent, $use_ssl, $severity)
 	{
+		$this->validateToken($token);
+
 		$this->_logToken = $token;		
 
 		$this->persistent = $persistent;
@@ -92,6 +94,12 @@ class LeLogger
 	public function __destruct()
 	{
 		$this->closeSocket();
+	}
+
+	public function validateToken($token){
+		if (empty($token)){
+			throw new InvalidArgumentException('Logentries Token was not provided in logentries.php');
+		}
 	}
 
 	public function closeSocket()
@@ -295,4 +303,3 @@ class LeLogger
 		}
 	}
 }
-?>
