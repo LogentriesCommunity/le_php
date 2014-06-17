@@ -18,10 +18,12 @@ and click Register. You will notice a token appear beside the name of the log, t
 
 library will use to access that logfile. You can copy and paste this now or later.
 
+Download
+--------
+This repo can be found on packagist here: https://packagist.org/packages/logentries/logentries
+
 Parameter Setup
 ---------------
-Download this repo as a ZIP file and unzip it into your app's directroy.
-
 Inside the `le_php-master` folder, open `logentries.php` as you need to fill in a parameter, `LOGENTRIES_TOKEN`.
 
 `LOGENTRIES_TOKEN` is the token we copied earlier from the Logentries UI. It associates that logger with the log file on Logentries.
