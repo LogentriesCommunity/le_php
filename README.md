@@ -1,4 +1,4 @@
-Logging to Logentries with Php
+Logging to Logentries with Php [![Build Status](https://travis-ci.org/logentries/le_php.png)](https://travis-ci.org/logentries/le_php)
 =======================================
 
 With these simple steps you can send your Php application logs to Logentries.
