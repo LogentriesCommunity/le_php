@@ -43,6 +43,10 @@ class LeLogger
 	private $resource = null;
 
 	private $_logToken = null;
+	
+// new variable for datahub ip address
+	private $_datahubIPAddress = null;
+	private $use_datahub = false;
 
 	private $severity = LOG_DEBUG;
 
@@ -60,11 +64,11 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $persistent, $ssl, $severity)
+	public static function getLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled)
 	{	
 		if (!self::$m_instance)
 		{
-			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity);
+			self::$m_instance = new LeLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled);
 		}
 
 		return self::$m_instance;
@@ -76,10 +80,22 @@ class LeLogger
 		self::$m_instance = NULL;
 	}
 
-	private function __construct($token, $persistent, $use_ssl, $severity)
+	private function __construct($token, $datahubIPAddress, $persistent, $use_ssl, $severity, $datahubEnabled)
 	{
-		$this->validateToken($token);
-
+	
+			// only validate the token when user is not using Datahub
+		if ($datahubEnabled === false)
+			{
+			$this->validateToken($token);
+			}
+			// only set datahub IP Address if using datahub.
+		else 
+			{
+// validate ip address????
+			$this->_datahubIPAddress = $datahubIPAddress;
+			$this->use_datahub = $datahubEnabled;
+			}		
+			
 		$this->_logToken = $token;		
 
 		$this->persistent = $persistent;
@@ -97,7 +113,8 @@ class LeLogger
 	}
 
 	public function validateToken($token){
-		if (empty($token)){
+	
+	if (empty($token) {
 			throw new InvalidArgumentException('Logentries Token was not provided in logentries.php');
 		}
 	}
@@ -120,6 +137,8 @@ class LeLogger
 		return $this->use_ssl;
 	}
 
+
+
 	public function getPort()
 	{
 		if ($this->isTLS())
@@ -129,13 +148,25 @@ class LeLogger
 			return self::LE_PORT;
 		}
 	}
+	
+		// check if datahub is enabled
+	public function isDatahub()
+	{
+		return $this->_datahubEnabled;
+	}
 
+// **** MAY NEED TO CHECK OTHER CONDITIONS HERE *****
 	public function getAddress()
 	{
-		if ($this->isTLS())
+		if ($this->isTLS() && this->isDatahub()===false )
 		{
 			return self::LE_TLS_ADDRESS;
-		}else{
+		}
+		else if ($this->isDatahub()
+		{
+			return self::_datahubIPAddress;
+		}
+		else{
 			return self::LE_ADDRESS;
 		}
 	}
@@ -148,7 +179,14 @@ class LeLogger
 	private function createSocket()
 	{
 		$port = $this->getPort();
+// delete before production
+		echo "port = " . $port . "\n";
+		
+// delete before production
 		$address = $this->getAddress();
+		echo "address = " . $address . "\n";
+		
+		
 		if ($this->isPersistent())
 		{
 			$resource = $this->my_pfsockopen($port, $address);
