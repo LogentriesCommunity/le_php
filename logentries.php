@@ -7,6 +7,16 @@
 	 */
 
 	$LOGENTRIES_TOKEN = "";
+	
+	
+// TO ENABLE DATAHUB SET 1.  IP ADDRESS OF YOUR DATAHUB   2. SET THE PORT (10000 default) 3 . $datahubEnables = true;	
+		
+	$DATAHUB_IP_ADDRESS = "";
+	$DATAHUB_PORT = 10000;	
+	$DATAHUB_ENABLED = false;
+	
+	
+	
 
 	// Whether the socket is persistent or not
 	$Persistent = true;
@@ -29,4 +39,5 @@
 		$LOGENTRIES_TOKEN = $ENV_TOKEN;
 	}
 	
-	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity);
+//	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity);
+	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $DATAHUB_IP_ADDRESS, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_PORT);
