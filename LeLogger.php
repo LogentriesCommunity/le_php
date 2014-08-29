@@ -45,7 +45,7 @@ class LeLogger
 	private $_logToken = null;
 	
 // new variable for datahub ip address
-	private $_datahubIPAddress = null;
+	private $_datahubIPAddress = "";
 	private $use_datahub = false;
 
 	private $severity = LOG_DEBUG;
@@ -84,17 +84,16 @@ class LeLogger
 	{
 	
 			// only validate the token when user is not using Datahub
-		if ($datahubEnabled === false)
-			{
-			$this->validateToken($token);
-			}
-			// only set datahub IP Address if using datahub.
-		else 
-			{
-// validate ip address????
-			$this->_datahubIPAddress = $datahubIPAddress;
-			$this->use_datahub = $datahubEnabled;
-			}		
+	if ($datahubEnabled == false)
+	{
+		$this->validateToken($token);
+	}
+	else
+	{
+		$this->_datahubIPAddress = $datahubIPAddress;
+		$this->use_datahub = $datahubEnabled;
+	
+	}
 			
 		$this->_logToken = $token;		
 
@@ -113,8 +112,7 @@ class LeLogger
 	}
 
 	public function validateToken($token){
-	
-	if (empty($token) {
+	if (empty($token) ) {
 			throw new InvalidArgumentException('Logentries Token was not provided in logentries.php');
 		}
 	}
@@ -152,19 +150,19 @@ class LeLogger
 		// check if datahub is enabled
 	public function isDatahub()
 	{
-		return $this->_datahubEnabled;
+		return $this->use_datahub;
 	}
 
 // **** MAY NEED TO CHECK OTHER CONDITIONS HERE *****
 	public function getAddress()
 	{
-		if ($this->isTLS() && this->isDatahub()===false )
+		if ($this->isTLS() && $this->isDatahub() )
 		{
 			return self::LE_TLS_ADDRESS;
 		}
-		else if ($this->isDatahub()
+		elseif ($this->isDatahub() )
 		{
-			return self::_datahubIPAddress;
+			return $this->_datahubIPAddress;
 		}
 		else{
 			return self::LE_ADDRESS;
