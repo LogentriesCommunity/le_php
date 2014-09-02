@@ -149,8 +149,6 @@ class LeLogger
 
 	public function validateToken($token){
 	
-	echo "\n\n line 167  INTO VALIDATION!!!!";
-
 	if (empty($token) ) {
 			throw new InvalidArgumentException('Logentries Token was not provided in logentries.php');
 		}
@@ -336,44 +334,21 @@ class LeLogger
 	}
 
 
-// public function writeToSocket($line)
-// 	{
-// 		$finalLine = $this->_logToken . $line;
-// 		if($this->isConnected())
-// 		{
-// 			fputs($this->resource, $finalLine);
-// 		}
-// 	}
-
-
 public function writeToSocket($line)
 	{
 
 		if ($this->isHostNameIDEnabled())
 		{
 			$finalLine = "HostID=" . $this->_host_id . " Host_Name=" . $this->_host_name . " " . $this->_logToken . " ". $line;
-						echo "\n\n\nELSE STATMENT 374 $this->_logToken\n\n\n";
-
 		}
 		else
 		{
-			
-			echo "\n\n\nELSE STATMENT 388 $this->_logToken\n\n\n";
-			echo "$this->_logToken";
 			$finalLine = $this->_logToken . " " . $line;
-			echo "\nline 391 -- finalLine variable = $finalLine\n";
 		}
 		
-	// 	{
-// 		echo "\n\n\nELSE STATMENT 387 $this->_logToken\n\n\n";
-// 			$finalLine = " " . $this->_logToken . $line;
-// 			echo "397 finalLine variable = $finalLine";
-// 		}
-// 		
 		
 		if($this->isConnected())
 		{
-			echo "\nline 403 -- finalLine variable = $finalLine\n";
 			fputs($this->resource, $finalLine);
 		}
 	}
