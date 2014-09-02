@@ -93,7 +93,11 @@ class LeLogger
 
 		if ($datahubEnabled===true)
 			{
-				// set datahub settings
+
+			// Check if a DataHub IP Address has been entered	
+			$this->validateDataHubIP($datahubIPAddress);	
+			
+			// set Datahub variable values			
 			$this->_datahubIPAddress = $datahubIPAddress;
 			$this->use_datahub = $datahubEnabled;
 			$this->_datahubPort = $datahubPort;	
@@ -105,24 +109,30 @@ class LeLogger
 		else   	// only validate the token when user is not using Datahub
 			{
 			$this->validateToken($token);	
-			$this->_logToken = $token;
+ 			$this->_logToken = $token;
 			}	
 
 		if ($host_name_id_enabled===true)
 			{
 			$this->use_host_name_id = $host_name_id_enabled;
-			$this->_host_id = $host_id;	
 		
 					// check host name exist.  If no host name has been specified, get the host name from the local machine.		
 			if ($host_name ==="")
 				{
-				$this->_host_name = gethostname();
+				$this->_host_name = "host_name=".gethostname();
 				}
 			else
 				{
-				$this->_host_name = $host_name;	
+				$this->_host_name = "host_name=".$host_name;	
 				}
-		
+			if ($host_id==="")
+				{
+				$this->_host_id = "";
+				}
+			else 
+				{
+				$this->_host_id = "host_ID=".$host_id;
+				}		
 		}
 		else     // no host name is desired to appear in logs
 		{  
@@ -154,7 +164,12 @@ class LeLogger
 		}
 	}
 
-
+	public function validateDataHubIP($datahubIPAddress)
+	{
+	if (empty($datahubIPAddress) ) {
+			throw new InvalidArgumentException('Logentries Datahub IP Address was not provided in logentries.php');
+		}
+	}
 
 	public function closeSocket()
 	{
@@ -339,7 +354,7 @@ public function writeToSocket($line)
 
 		if ($this->isHostNameIDEnabled())
 		{
-			$finalLine = "HostID=" . $this->_host_id . " Host_Name=" . $this->_host_name . " " . $this->_logToken . " ". $line;
+			$finalLine = $this->_logToken . " " . $this->_host_id . " " . $this->_host_name . " " . $line;
 		}
 		else
 		{
