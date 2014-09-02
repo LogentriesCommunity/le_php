@@ -3,13 +3,13 @@
 	require_once('LeLogger.php');
 	
 /**********
-*  BEGIN User - Defined Variables
+*  BEGIN - User - Defined Variables
 ***********/
 
 
-	// put your Log's Logentries token inside the double quotes below.
-// 	$LOGENTRIES_TOKEN = "";
-	$LOGENTRIES_TOKEN = "6710c1fb-2ed8-405a-8aee-90f7b3508dee";
+	// put your Log's Logentries token inside the double quotes in the $LOGENTRIES_TOKEN constant below.
+  	$LOGENTRIES_TOKEN = "";
+
 
 
 /*
@@ -18,33 +18,43 @@
 *		2. IP Address of your datahub location  
 *		3. Set the Port for communcating with Datahub (10000 default) 
 *
-*		NOTE: Datahub will ignore your Logentries log token as it is not required when using Datahub.
+*		NOTE: If $DATAHUB_ENABLED = true, Datahub will ignore your Logentries log token as it is not required when using Datahub.
 */
 	
-	$DATAHUB_ENABLED= false;
+	$DATAHUB_ENABLED = false;
 	
+	
+	// Your DataHub IP Address MUST be specified if $DATAHUB_ENABLED = true
+ 	
  	$DATAHUB_IP_ADDRESS = "";
+	
 		
-	// Default port is 10000, 
+	//	  Default port for DataHub is 10000, 
 	//    If you change this from port 10000, you will have to change your settings port on your datahub machine, 
 	//	  namely the datahub local config file in /etc/leproxy/leproxyLocal.config then restart leproxy - sudo service leproxy restart
+	
 	$DATAHUB_PORT = 10000;	
 	
 	
 // Allow Your Host Name And Host ID To Be Printed To Your Log Events As Key / Value Pairs.
 	// To give your Log events a Host_Name and Host_ID appear in your logs as Key Value Pairs, change this value to 'true' (without quotes)
+	
 	$HOST_ID_NAME_ENABLED = true;
 
-	// Enter a Host Name to appear in your Logs - If no host name is entered one will be assigned based on your own Host name for the local machine using the php function gethostname();
+	
+	// Enter a Customized Host Name to appear in your Logs - If no host name is entered one will be assigned based on your own Host name for the local machine using the php function gethostname();
+	
 	$HOST_NAME = "";
  
-	// Enter a Host ID to appear in your Logs (if $HOST_ID_NAME_ENABLE = true)  if this is set to false, no HOST_ID or HOST_NAME will appear in your logs.
+	
+	// Enter a Host ID to appear in your Log events 
 	// if $HOST_ID is empty "", it wil not print to your log events... this value will only print if there is a value below as in $HOST_ID="12345".
+	
 	$HOST_ID = "";
 	
 	
 /************
-*  END User - Defined Variables
+*  END  -  User - Defined Variables
 ************/
 
 	

@@ -116,7 +116,7 @@ class LeLogger
 			{
 			$this->use_host_name_id = $host_name_id_enabled;
 		
-					// check host name exist.  If no host name has been specified, get the host name from the local machine.		
+				// check host name exist.  If no host name has been specified, get the host name from the local machine, use Key value pairing.		
 			if ($host_name ==="")
 				{
 				$this->_host_name = "host_name=".gethostname();
@@ -125,6 +125,8 @@ class LeLogger
 				{
 				$this->_host_name = "host_name=".$host_name;	
 				}
+				
+				// check $host_id, if it is empty don't print it in the log event, otherwise add it as a key value pair.
 			if ($host_id==="")
 				{
 				$this->_host_id = "";
@@ -134,7 +136,7 @@ class LeLogger
 				$this->_host_id = "host_ID=".$host_id;
 				}		
 		}
-		else     // no host name is desired to appear in logs
+		else     // no host name desired to appear in logs
 		{  
 			$this->use_host_name_id = $host_name_id_enabled;
 			$this->_host_id = "";
