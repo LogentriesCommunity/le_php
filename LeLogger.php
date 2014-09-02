@@ -47,6 +47,10 @@ class LeLogger
 // new variable for datahub ip address
 	private $_datahubIPAddress = "";
 	private $use_datahub = false;
+	private $_datahubPort = 10000;
+	private $use_host_name_id = false;
+	private $_host_name = "";
+	private $_host_id = "";
 
 	private $severity = LOG_DEBUG;
 
@@ -64,15 +68,17 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled)
+	public static function getLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled)
 	{	
 		if (!self::$m_instance)
 		{
-			self::$m_instance = new LeLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled);
+			self::$m_instance = new LeLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled);
 		}
 
 		return self::$m_instance;
 	}
+	
+	
 	
 	// Destroy singleton instance, used in PHPUnit tests
 	public static function tearDown()
@@ -80,23 +86,52 @@ class LeLogger
 		self::$m_instance = NULL;
 	}
 
-	private function __construct($token, $datahubIPAddress, $persistent, $use_ssl, $severity, $datahubEnabled)
+	private function __construct($token, $datahubIPAddress, $persistent, $use_ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled)
 	{
 	
-			// only validate the token when user is not using Datahub
-	if ($datahubEnabled == false)
-	{
-		$this->validateToken($token);
-	}
-	else
-	{
-		$this->_datahubIPAddress = $datahubIPAddress;
-		$this->use_datahub = $datahubEnabled;
 	
-	}
-			
-		$this->_logToken = $token;		
 
+		if ($datahubEnabled===true)
+			{
+				// set datahub settings
+			$this->_datahubIPAddress = $datahubIPAddress;
+			$this->use_datahub = $datahubEnabled;
+			$this->_datahubPort = $datahubPort;	
+		
+		
+			// if datahub is being used the logToken should be set to null
+			$this->_logToken = null;	
+			}
+		else   	// only validate the token when user is not using Datahub
+			{
+			$this->validateToken($token);	
+			$this->_logToken = $token;
+			}	
+
+		if ($host_name_id_enabled===true)
+			{
+			$this->use_host_name_id = $host_name_id_enabled;
+			$this->_host_id = $host_id;	
+		
+					// check host name exist.  If no host name has been specified, get the host name from the local machine.		
+			if ($host_name ==="")
+				{
+				$this->_host_name = gethostname();
+				}
+			else
+				{
+				$this->_host_name = $host_name;	
+				}
+		
+		}
+		else     // no host name is desired to appear in logs
+		{  
+			$this->use_host_name_id = $host_name_id_enabled;
+			$this->_host_id = "";
+			$this->_host_name= "";
+			
+		}
+		
 		$this->persistent = $persistent;
 
 		$this->use_ssl = $use_ssl;
@@ -111,11 +146,17 @@ class LeLogger
 		$this->closeSocket();
 	}
 
+
 	public function validateToken($token){
+	
+	echo "\n\n line 167  INTO VALIDATION!!!!";
+
 	if (empty($token) ) {
 			throw new InvalidArgumentException('Logentries Token was not provided in logentries.php');
 		}
 	}
+
+
 
 	public function closeSocket()
 	{
@@ -142,29 +183,42 @@ class LeLogger
 		if ($this->isTLS())
 		{
 			return self::LE_TLS_PORT;
-		}else{
+		}
+		elseif ($this->isDatahub() ){
+		 	return $this->_datahubPort;
+		}
+		else{
 			return self::LE_PORT;
 		}
 	}
+	
 	
 		// check if datahub is enabled
 	public function isDatahub()
 	{
 		return $this->use_datahub;
 	}
+	
+	
+	public function isHostNameIDEnabled()
+	{
+	return $this->use_host_name_id;  
+	}
+	
 
-// **** MAY NEED TO CHECK OTHER CONDITIONS HERE *****
 	public function getAddress()
 	{
-		if ($this->isTLS() && $this->isDatahub() )
+		if ($this->isTLS() && !$this->isDatahub() )
 		{
 			return self::LE_TLS_ADDRESS;
+
 		}
 		elseif ($this->isDatahub() )
 		{
 			return $this->_datahubIPAddress;
 		}
-		else{
+		else
+		{
 			return self::LE_ADDRESS;
 		}
 	}
@@ -177,24 +231,24 @@ class LeLogger
 	private function createSocket()
 	{
 		$port = $this->getPort();
-// delete before production
-		echo "port = " . $port . "\n";
 		
-// delete before production
 		$address = $this->getAddress();
-		echo "address = " . $address . "\n";
-		
 		
 		if ($this->isPersistent())
 		{
 			$resource = $this->my_pfsockopen($port, $address);
-		}else{
+		}
+		else
+		{
 			$resource = $this->my_fsockopen($port, $address);
 		}
-		if (is_resource($resource) && !feof($resource)) {
+		
+		if (is_resource($resource) && !feof($resource)) 
+		{
 			$this->resource = $resource;
 		}
 	}
+	
 
 	private function my_pfsockopen($port, $address)
 	{
@@ -281,11 +335,45 @@ class LeLogger
 		}
 	}
 
-	public function writeToSocket($line)
+
+// public function writeToSocket($line)
+// 	{
+// 		$finalLine = $this->_logToken . $line;
+// 		if($this->isConnected())
+// 		{
+// 			fputs($this->resource, $finalLine);
+// 		}
+// 	}
+
+
+public function writeToSocket($line)
 	{
-		$finalLine = $this->_logToken . $line;
+
+		if ($this->isHostNameIDEnabled())
+		{
+			$finalLine = "HostID=" . $this->_host_id . " Host_Name=" . $this->_host_name . " " . $this->_logToken . " ". $line;
+						echo "\n\n\nELSE STATMENT 374 $this->_logToken\n\n\n";
+
+		}
+		else
+		{
+			
+			echo "\n\n\nELSE STATMENT 388 $this->_logToken\n\n\n";
+			echo "$this->_logToken";
+			$finalLine = $this->_logToken . " " . $line;
+			echo "\nline 391 -- finalLine variable = $finalLine\n";
+		}
+		
+	// 	{
+// 		echo "\n\n\nELSE STATMENT 387 $this->_logToken\n\n\n";
+// 			$finalLine = " " . $this->_logToken . $line;
+// 			echo "397 finalLine variable = $finalLine";
+// 		}
+// 		
+		
 		if($this->isConnected())
 		{
+			echo "\nline 403 -- finalLine variable = $finalLine\n";
 			fputs($this->resource, $finalLine);
 		}
 	}
@@ -315,6 +403,7 @@ class LeLogger
 
 	private function _getTime($level)
 	{
+
 		$time = date(self::$_timestampFormat);
 
 		switch ($level) {
