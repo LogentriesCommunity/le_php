@@ -30,11 +30,12 @@ Inside the `le_php-master` folder, open `logentries.php` as you need to fill in 
 
 
 
-Additional Parameter Setup - Adding a Custom Host Name and Host ID sent in your PHP log events
+Adding a Custom Host Name and Host ID sent in your PHP log events
 ---------------
 To set a custom Host Name and / or a custom Host ID that will appear in your PHP log events as Key / Value pairs:
 
 Inside the `le_php-master` folder, open `logentries.php` and fill in the parameters as follows:
+
 	$HOST_ID_NAME_ENABLED = true;
 
 	$HOST_NAME = "";
@@ -48,7 +49,7 @@ If no $HOST_ID is set and the empty string is left unaltered, no host id Key / V
 
 
 
-Additional Parameters Setup - Sending your PHP Log Events To Datahub 
+Sending your PHP Log Events To Datahub 
 ---------------
 
 You can send your PHP log events to your Logentries Datahub log.  
