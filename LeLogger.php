@@ -44,10 +44,10 @@ class LeLogger
 
 	private $_logToken = null;
 	
-// new variable for datahub ip address
 	private $_datahubIPAddress = "";
 	private $use_datahub = false;
 	private $_datahubPort = 10000;
+
 	private $use_host_name_id = false;
 	private $_host_name = "";
 	private $_host_id = "";
