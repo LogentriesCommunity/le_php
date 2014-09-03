@@ -34,7 +34,7 @@
 
 		public function testIsPersistent()
 		{
-			$log = LeLogger::getLogger('token', "", false, false, LOG_DEBUG, true, 10000, "", "", false);
+			$log = LeLogger::getLogger('token', "", false, false, LOG_DEBUG, false, 10000, "", "", false);
 
 
 			$this->assertFalse($log->isPersistent());
