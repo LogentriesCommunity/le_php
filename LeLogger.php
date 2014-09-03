@@ -88,11 +88,9 @@ class LeLogger
 
 	private function __construct($token, $datahubIPAddress, $persistent, $use_ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled)
 	{
-	
-	
 
 		if ($datahubEnabled===true)
-			{
+		{
 
 			// Check if a DataHub IP Address has been entered	
 			$this->validateDataHubIP($datahubIPAddress);	
@@ -105,36 +103,36 @@ class LeLogger
 		
 			// if datahub is being used the logToken should be set to null
 			$this->_logToken = null;	
-			}
+		}
 		else   	// only validate the token when user is not using Datahub
-			{
+		{
 			$this->validateToken($token);	
  			$this->_logToken = $token;
-			}	
+		}	
 
 		if ($host_name_id_enabled===true)
-			{
+		{
 			$this->use_host_name_id = $host_name_id_enabled;
 		
 				// check host name exist.  If no host name has been specified, get the host name from the local machine, use Key value pairing.		
 			if ($host_name ==="")
-				{
+			{
 				$this->_host_name = "host_name=".gethostname();
-				}
+			}
 			else
-				{
+			{
 				$this->_host_name = "host_name=".$host_name;	
-				}
+			}
 				
 				// check $host_id, if it is empty don't print it in the log event, otherwise add it as a key value pair.
 			if ($host_id==="")
-				{
+			{
 				$this->_host_id = "";
-				}
+			}
 			else 
-				{
-				$this->_host_id = "host_ID=".$host_id;
-				}		
+			{
+			$this->_host_id = "host_ID=".$host_id;
+			}		
 		}
 		else     // no host name desired to appear in logs
 		{  
@@ -152,6 +150,7 @@ class LeLogger
 
 		$this->connectionTimeout = (float) ini_get('default_socket_timeout');
 	}
+
 
 	public function __destruct()
 	{
@@ -202,7 +201,8 @@ class LeLogger
 		elseif ($this->isDatahub() ){
 		 	return $this->_datahubPort;
 		}
-		else{
+		else
+		{
 			return self::LE_PORT;
 		}
 	}
