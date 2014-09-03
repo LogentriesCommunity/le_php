@@ -49,18 +49,18 @@ If no $HOST_ID is set and the empty string is left unaltered, no host id Key / V
 
 
 
-Sending your PHP Log Events To Datahub 
+Sending your PHP Log Events To DataHub 
 ---------------
 
-You can send your PHP log events to your Logentries Datahub log.  
+You can send your PHP log events to your Logentries DataHub.  
 To do this you must set three user defined constants in the logentries.php file
 
 	1. Change the $DATAHUB_ENABLED constant to true as in $DATAHUB_ENABLED = true;	
-	2. Set the IP Address of your Datahub machine in $DATAHUB_IP_ADDRESS = "";
-	3. Set the Port for communicating with Datahub (10000 default) in $DATAHUB_PORT = 10000;	
+	2. Set the IP Address of your DataHub machine in $DATAHUB_IP_ADDRESS = "";
+	3. Set the Port for communicating with DataHub (10000 default) in $DATAHUB_PORT = 10000;	
 
-If you change the $DATAHUB_PORT from port 10000, you will have to change your settings port on your datahub machine, 
-specifically in the datahub local config file in /etc/leproxy/leproxyLocal.config then restart leproxy - sudo service leproxy restart
+If you change the $DATAHUB_PORT from port 10000, you will have to change your settings port on your DataHub machine, 
+specifically in the DataHub local config file in /etc/leproxy/leproxyLocal.config then restart leproxy - sudo service leproxy restart
 
 
 Code Setup
