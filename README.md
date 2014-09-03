@@ -29,6 +29,39 @@ Inside the `le_php-master` folder, open `logentries.php` as you need to fill in 
 `LOGENTRIES_TOKEN` is the token we copied earlier from the Logentries UI. It associates that logger with the log file on Logentries.
 
 
+Additional Parameters Setup 
+- Adding a Custom Host Name and Host ID sent in your PHP log events
+---------------
+To set a custom Host Name and / or a custom Host ID that will appear in your PHP log events as Key / Value pairs:
+
+Inside the `le_php-master` folder, open `logentries.php` and fill in the parameters as follows:
+	$HOST_ID_NAME_ENABLED = true;
+
+	$HOST_NAME = "";
+
+	$HOST_ID = "";
+
+The $HOST_NAME constant can be left as an empty string, and the library will automatically attempt to assign a host name from 
+your local host machine and use that as the custom host name.
+
+If no $HOST_ID is set and the empty string is left unaltered, no host id Key / Value pairing will appear in your PHP logs.
+
+
+Additional Parameters Setup - DATAHUB
+- Sending your PHP Log Events To Datahub 
+---------------
+
+You can send your PHP log events to your Logentries Datahub log.  
+To do this you must set three user defined constants in the logentries.php file
+
+	1. Change the $DATAHUB_ENABLED constant to true as in $DATAHUB_ENABLED = true;	
+	2. Set the IP Address of your Datahub machine in $DATAHUB_IP_ADDRESS = "";
+	3. Set the Port for communicating with Datahub (10000 default) in $DATAHUB_PORT = 10000;	
+
+If you change the $DATAHUB_PORT from port 10000, you will have to change your settings port on your datahub machine, 
+specifically in the datahub local config file in /etc/leproxy/leproxyLocal.config then restart leproxy - sudo service leproxy restart
+
+
 Code Setup
 ----------
 
@@ -47,3 +80,6 @@ To use it in your code, enter the following lines, making changes accordingly if
 	$log->Error(" ");
 	$log->Alert(" ");
 	$log->Emerg(" ");
+	
+	
+updated 2014-09-03 11:55

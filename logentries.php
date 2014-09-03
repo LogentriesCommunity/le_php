@@ -13,10 +13,10 @@
 
 
 /*
-*	TO SEND LOG EVENTS TO YOUR DATAHUB CHANGE THE FOLLOWING VARIABLES
+*	TO SEND LOG EVENTS TO YOUR DATAHUB, CHANGE THE FOLLOWING VARIABLES
 *		1. Change the $DATAHUB_ENABLED variable to true;	
 *		2. IP Address of your datahub location  
-*		3. Set the Port for communcating with Datahub (10000 default) 
+*		3. Set the Port for communicating with Datahub (10000 default) 
 *
 *		NOTE: If $DATAHUB_ENABLED = true, Datahub will ignore your Logentries log token as it is not required when using Datahub.
 */
@@ -31,7 +31,7 @@
 		
 	//	  Default port for DataHub is 10000, 
 	//    If you change this from port 10000, you will have to change your settings port on your datahub machine, 
-	//	  namely the datahub local config file in /etc/leproxy/leproxyLocal.config then restart leproxy - sudo service leproxy restart
+	//	  specifically in the datahub local config file in /etc/leproxy/leproxyLocal.config then restart leproxy - sudo service leproxy restart
 	
 	$DATAHUB_PORT = 10000;	
 	
@@ -48,7 +48,7 @@
  
 	
 	// Enter a Host ID to appear in your Log events 
-	// if $HOST_ID is empty "", it wil not print to your log events... this value will only print if there is a value below as in $HOST_ID="12345".
+	// if $HOST_ID is empty "", it wil not print to your log events.  This value will only print to your log events if there is a value below as in $HOST_ID="12345".
 	
 	$HOST_ID = "";
 	
