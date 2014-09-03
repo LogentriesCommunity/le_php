@@ -38,9 +38,9 @@ Inside the `le_php-master` folder, open `logentries.php` and fill in the paramet
 
 	$HOST_ID_NAME_ENABLED = true;
 
-	$HOST_NAME = "";
+	$HOST_NAME = "Custom_host_name_here";
 
-	$HOST_ID = "";
+	$HOST_ID = "Custom_ID_here_12345";
 
 The $HOST_NAME constant can be left as an empty string, and the library will automatically attempt to assign a host name from 
 your local host machine and use that as the custom host name.
