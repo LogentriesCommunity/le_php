@@ -32,11 +32,11 @@ Inside the `le_php-master` folder, open `logentries.php` as you need to fill in 
 
 Adding a Custom Host Name and Host ID sent in your PHP log events
 ---------------
-To set a custom Host Name and / or a custom Host ID that will appear in your PHP log events as Key / Value pairs:
+To set a custom Host Name that will appear in your PHP log events as Key / Value pairs:
 
 Inside the `le_php-master` folder, open `logentries.php` and fill in the parameters as follows:
 
-	$HOST_ID_NAME_ENABLED = true;
+	$HOST_NAME_ENABLED = true;
 
 	$HOST_NAME = "Custom_host_name_here";
 
@@ -45,7 +45,9 @@ Inside the `le_php-master` folder, open `logentries.php` and fill in the paramet
 The $HOST_NAME constant can be left as an empty string, and the library will automatically attempt to assign a host name from 
 your local host machine and use that as the custom host name.
 
-If no $HOST_ID is set and the empty string is left unaltered, no host id Key / Value pairing will appear in your PHP logs.
+To set a custom Host ID that will appear in your PHP log events as Key / Value pairs:
+Enter a value instead of the empty string in $HOST_ID = "";
+If no $HOST_ID is set and the empty string is left unaltered, no Host ID or Key / Value pairing will appear in your PHP logs.
 
 
 
