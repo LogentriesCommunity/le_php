@@ -7,13 +7,14 @@
 ***********/
 
 
-	// put your Log's Logentries token inside the double quotes in the $LOGENTRIES_TOKEN constant below.
+	// put your Logentries Log Token inside the double quotes in the $LOGENTRIES_TOKEN constant below.
+  	
   	$LOGENTRIES_TOKEN = "";
 
 
 
-/*
-*	TO SEND LOG EVENTS TO YOUR DATAHUB, CHANGE THE FOLLOWING VARIABLES
+/*  
+*	To Send Log Events To Your DataHub, Change The Following Variables
 *		1. Change the $DATAHUB_ENABLED variable to true;	
 *		2. IP Address of your datahub location  
 *		3. Set the Port for communicating with Datahub (10000 default) 
@@ -36,21 +37,23 @@
 	$DATAHUB_PORT = 10000;	
 	
 	
-// Allow Your Host Name And Host ID To Be Printed To Your Log Events As Key / Value Pairs.
-	// To give your Log events a Host_Name and Host_ID appear in your logs as Key Value Pairs, change this value to 'true' (without quotes)
-	
-	$HOST_ID_NAME_ENABLED = true;
+	// Allow Your Host Name To Be Printed To Your Log Events As Key / Value Pairs.
+	// To give your Log events a Host_Name which will appear in your logs as Key Value Pairs, change this value to 'true' (without quotes)
+
+	$HOST_NAME_ENABLED = false;
 
 	
 	// Enter a Customized Host Name to appear in your Logs - If no host name is entered one will be assigned based on your own Host name for the local machine using the php function gethostname();
-	
+
 	$HOST_NAME = "";
  
 	
-	// Enter a Host ID to appear in your Log events 
+	
+	// Enter a Host ID to appear in your Log events
 	// if $HOST_ID is empty "", it wil not print to your log events.  This value will only print to your log events if there is a value below as in $HOST_ID="12345".
 	
 	$HOST_ID = "";
+	
 	
 	
 /************
@@ -82,4 +85,4 @@
 	}
 	
 
-	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $DATAHUB_IP_ADDRESS, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_PORT, $HOST_ID, $HOST_NAME, $HOST_ID_NAME_ENABLED);
+	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_IP_ADDRESS, $DATAHUB_PORT, $HOST_ID, $HOST_NAME, $HOST_NAME_ENABLED);

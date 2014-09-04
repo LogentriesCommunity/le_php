@@ -48,7 +48,7 @@ class LeLogger
 	private $use_datahub = false;
 	private $_datahubPort = 10000;
 
-	private $use_host_name_id = false;
+	private $use_host_name = false;
 	private $_host_name = "";
 	private $_host_id = "";
 
@@ -68,11 +68,11 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled)
+	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
 	{	
 		if (!self::$m_instance)
 		{
-			self::$m_instance = new LeLogger($token, $datahubIPAddress, $persistent, $ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled);
+			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
 		}
 
 		return self::$m_instance;
@@ -86,7 +86,7 @@ class LeLogger
 		self::$m_instance = NULL;
 	}
 
-	private function __construct($token, $datahubIPAddress, $persistent, $use_ssl, $severity, $datahubEnabled, $datahubPort, $host_id, $host_name, $host_name_id_enabled)
+	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
 	{
 
 		if ($datahubEnabled===true)
@@ -110,9 +110,9 @@ class LeLogger
  			$this->_logToken = $token;
 		}	
 
-		if ($host_name_id_enabled===true)
+		if ($host_name_enabled===true)
 		{
-			$this->use_host_name_id = $host_name_id_enabled;
+			$this->use_host_name = $host_name_enabled;
 		
 				// check host name exist.  If no host name has been specified, get the host name from the local machine, use Key value pairing.		
 			if ($host_name ==="")
@@ -123,28 +123,32 @@ class LeLogger
 			{
 				$this->_host_name = "host_name=".$host_name;	
 			}
-				
-				// check $host_id, if it is empty don't print it in the log event, otherwise add it as a key value pair.
-			if ($host_id==="")
-			{
-				$this->_host_id = "";
-			}
-			else 
-			{
-			$this->_host_id = "host_ID=".$host_id;
-			}		
+			
 		}
 		else     // no host name desired to appear in logs
 		{  
-			$this->use_host_name_id = $host_name_id_enabled;
-			$this->_host_id = "";
+			$this->use_host_name = $host_name_enabled;
 			$this->_host_name= "";
 			
 		}
 		
+		// check $host_id, if it is empty "", don't leave empty, otherwise modify it as a key value pair for printing to the log event.
+		if ($host_id==="")
+		{
+			$this->_host_id = "";
+		}
+		else 
+		{
+		$this->_host_id = "host_ID=".$host_id;
+		}		
+		
+		
 		$this->persistent = $persistent;
 
-		$this->use_ssl = $use_ssl;
+//**** possible problem here with $ssl not sending.
+		$this->use_ssl = $ssl;
+
+//		$this->use_ssl = $use_ssl;
 
 		$this->severity = $severity;
 
@@ -198,7 +202,8 @@ class LeLogger
 		{
 			return self::LE_TLS_PORT;
 		}
-		elseif ($this->isDatahub() ){
+		elseif ($this->isDatahub() )
+		{
 		 	return $this->_datahubPort;
 		}
 		else
@@ -215,9 +220,9 @@ class LeLogger
 	}
 	
 	
-	public function isHostNameIDEnabled()
+	public function isHostNameEnabled()
 	{
-	return $this->use_host_name_id;  
+	return $this->use_host_name;  
 	}
 	
 
@@ -354,13 +359,13 @@ class LeLogger
 public function writeToSocket($line)
 	{
 
-		if ($this->isHostNameIDEnabled())
+		if ($this->isHostNameEnabled())
 		{
 			$finalLine = $this->_logToken . " " . $this->_host_id . " " . $this->_host_name . " " . $line;
 		}
 		else
 		{
-			$finalLine = $this->_logToken . " " . $line;
+			$finalLine = $this->_logToken . $this->_host_id . " " . $line;
 		}
 		
 		
