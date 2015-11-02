@@ -11,7 +11,8 @@
   	
   	$LOGENTRIES_TOKEN = "";
 
-
+  	// Set your app's timezone (default is UTC)
+  	$HOST_TIMEZONE = "UTC";
 
 /*  
 *	To Send Log Events To Your DataHub, Change The Following Variables
@@ -85,4 +86,4 @@
 	}
 	
 
-	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_IP_ADDRESS, $DATAHUB_PORT, $HOST_ID, $HOST_NAME, $HOST_NAME_ENABLED);
+	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_IP_ADDRESS, $DATAHUB_PORT, $HOST_ID, $HOST_NAME, $HOST_NAME_ENABLED, $HOST_TIMEZONE);

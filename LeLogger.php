@@ -17,9 +17,6 @@
 * @version 1.6
 */
 
-// Set the defaut system timezone
-date_default_timezone_set("UTC");
-
 class LeLogger 
 {
 	//BSD syslog log levels
@@ -71,12 +68,14 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
+	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $host_timezone)
 	{	
 		if (!self::$m_instance)
 		{
 			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
 		}
+
+		date_default_timezone_set($host_timezone);
 
 		return self::$m_instance;
 	}
