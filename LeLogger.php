@@ -88,7 +88,7 @@ class LeLogger
 		self::$m_instance = NULL;
 	}
 
-	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
+	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $host_timezone)
 	{
 
 		if ($datahubEnabled===true)
