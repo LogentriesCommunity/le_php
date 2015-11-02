@@ -72,7 +72,7 @@ class LeLogger
 	{	
 		if (!self::$m_instance)
 		{
-			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
+			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $host_timezone);
 		}
 
 		date_default_timezone_set($host_timezone);
