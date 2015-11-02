@@ -52,6 +52,8 @@ class LeLogger
 	private $_host_name = "";
 	private $_host_id = "";
 
+	private $host_timezone;
+
 	private $severity = LOG_DEBUG;
 
 	private $connectionTimeout;
@@ -70,12 +72,11 @@ class LeLogger
 
 	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $host_timezone)
 	{	
+		date_default_timezone_set($host_timezone);
 		if (!self::$m_instance)
 		{
-			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $host_timezone);
+			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
 		}
-
-		date_default_timezone_set($host_timezone);
 
 		return self::$m_instance;
 	}
@@ -88,7 +89,7 @@ class LeLogger
 		self::$m_instance = NULL;
 	}
 
-	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $host_timezone)
+	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
 	{
 
 		if ($datahubEnabled===true)
@@ -143,7 +144,6 @@ class LeLogger
 		{
 		$this->_host_id = "host_ID=".$host_id;
 		}		
-		
 		
 		$this->persistent = $persistent;
 
