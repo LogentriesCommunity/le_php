@@ -17,6 +17,9 @@
 * @version 1.6
 */
 
+// Set the defaut system timezone
+date_default_timezone_set("UTC");
+
 class LeLogger 
 {
 	//BSD syslog log levels
