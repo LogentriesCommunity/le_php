@@ -32,6 +32,20 @@
 
 		}
 
+		public function testMultiplyConnections()
+		{
+			$logFirst = LeLogger::getLogger('token1', false, false, LOG_DEBUG, false, "", 10000, "", "", false);
+			$logSecond = LeLogger::getLogger('token2', false, false, LOG_DEBUG, false, "", 10000, "", "", false);
+			$logThird = LeLogger::getLogger('token3', false, false, LOG_DEBUG, false, "", 10000, "", "", false);
+
+			$this->assertNotEquals('token1', $logSecond->getToken());
+			$this->assertNotEquals('token2', $logThird->getToken());
+
+			$this->assertEquals('token1', $logFirst->getToken());
+			$this->assertEquals('token2', $logSecond->getToken());
+			$this->assertEquals('token3', $logThird->getToken());
+		}
+
 		public function testIsPersistent()
 		{
 			$log = LeLogger::getLogger('token', false, true, LOG_DEBUG, false, "", 10000, "", "", false);
