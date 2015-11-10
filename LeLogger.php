@@ -61,21 +61,22 @@ class LeLogger
 	private $use_ssl = false;
 	
 	private static $_timestampFormat = 'Y-m-d G:i:s';
-	
-	private static $m_instance;
+
+	/** @var LeLogger[]  */
+	private static $m_instance = array();
 
 	private $errno;
 	
 	private $errstr;
 
 	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
-	{	
-		if (!self::$m_instance)
+	{
+		if ( ! isset(self::$m_instance[$token]))
 		{
-			self::$m_instance = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
+			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
 		}
 
-		return self::$m_instance;
+		return self::$m_instance[$token];
 	}
 	
 	
@@ -83,7 +84,7 @@ class LeLogger
 	// Destroy singleton instance, used in PHPUnit tests
 	public static function tearDown()
 	{	
-		self::$m_instance = NULL;
+		self::$m_instance = array();
 	}
 
 	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
@@ -195,6 +196,10 @@ class LeLogger
 	}
 
 
+	public function getToken()
+	{
+		return $this->_logToken;
+	}
 
 	public function getPort()
 	{
