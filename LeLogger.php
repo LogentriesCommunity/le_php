@@ -350,7 +350,7 @@ class LeLogger
 		$this->connectIfNotConnected();
 
 		if ($this->severity >= $curr_severity) {
-			$prefix = $this->_getTime($curr_severity);
+			$prefix = ''; // $this->_getTime($curr_severity);
 
 			$multiline = $this->substituteNewline($line);
 
