@@ -69,11 +69,11 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
 	{
+	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
 		if ( ! isset(self::$m_instance[$token]))
 		{
-			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled);
+			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $add_local_timestamp);
 		}
 
 		return self::$m_instance[$token];
@@ -87,7 +87,7 @@ class LeLogger
 		self::$m_instance = array();
 	}
 
-	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled)
+	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
 	{
 
 		if ($datahubEnabled===true)
@@ -143,6 +143,9 @@ class LeLogger
 		$this->_host_id = "host_ID=".$host_id;
 		}		
 		
+		
+		// Set timestamp toggle
+		$this->add_timestamp = $add_local_timestamp;
 		
 		$this->persistent = $persistent;
 
@@ -350,7 +353,7 @@ class LeLogger
 		$this->connectIfNotConnected();
 
 		if ($this->severity >= $curr_severity) {
-			$prefix = ''; // $this->_getTime($curr_severity);
+			$prefix = ($this->add_timestamp ? $this->_getTime($curr_severity) . ' - ' : '') . $this->_getLevel($curr_severity) . ' - ';
 
 			$multiline = $this->substituteNewline($line);
 
@@ -403,30 +406,32 @@ public function writeToSocket($line)
 		$this->createSocket();
 	}
 
-	private function _getTime($level)
+	private function _getTime()
 	{
-
-		$time = date(self::$_timestampFormat);
-
+		return date(self::$_timestampFormat);
+	}
+	
+	private function _getLevel($level)
+	{
 		switch ($level) {
 			case LOG_DEBUG:
-				return "$time - DEBUG - ";
+				return "DEBUG";
 			case LOG_INFO:
-				return "$time - INFO - ";
+				return "INFO";
 			case LOG_NOTICE:
-				return "$time - NOTICE - ";
+				return "NOTICE";
 			case LOG_WARNING:
-				return "$time - WARN - ";
+				return "WARN";
 			case LOG_ERR:
-				return "$time - ERROR - ";
+				return "ERROR";
 			case LOG_CRIT:
-				return "$time - CRITICAL - ";
+				return "CRITICAL";
 			case LOG_ALERT:
-				return "$time - ALERT - ";
+				return "ALERT";
 			case LOG_EMERG:
-				return "$time - EMERGENCY - ";
+				return "EMERGENCY";
 			default:
-				return "$time - LOG - ";
+				return "LOG";
 		}
 	}
 }

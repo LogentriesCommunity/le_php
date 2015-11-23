@@ -53,6 +53,11 @@
 	// if $HOST_ID is empty "", it wil not print to your log events.  This value will only print to your log events if there is a value below as in $HOST_ID="12345".
 	
 	$HOST_ID = "";
+
+	
+	// Add the local server timestamp to each log item
+
+	$ADD_LOCAL_TIMESTAMP = true;
 	
 	
 	
@@ -85,4 +90,4 @@
 	}
 	
 
-	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_IP_ADDRESS, $DATAHUB_PORT, $HOST_ID, $HOST_NAME, $HOST_NAME_ENABLED);
+	$log = LeLogger::getLogger($LOGENTRIES_TOKEN, $Persistent, $SSL, $Severity, $DATAHUB_ENABLED, $DATAHUB_IP_ADDRESS, $DATAHUB_PORT, $HOST_ID, $HOST_NAME, $HOST_NAME_ENABLED, $ADD_LOCAL_TIMESTAMP);
