@@ -82,7 +82,7 @@
 
 			$this->tearDown();
 
-			$log = LeLogger::getLogger('token', true, true, LOG_DEBUG, false, "", 20000, "", "", false, true);
+			$log = LeLogger::getLogger('token', true, true, LOG_DEBUG, false, "", 0, "", "", false, true);
 
 			$this->assertEquals(20000, $log->getPort());
 		}

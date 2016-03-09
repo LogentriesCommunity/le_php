@@ -35,6 +35,8 @@ class LeLogger
 	const LE_ADDRESS = 'tcp://data.logentries.com';
 	// Logentries server address for receiving logs via TLS
 	const LE_TLS_ADDRESS = 'tls://api.logentries.com';
+	// Logentries server port for receiving logs with TLS by token
+	const LE_TLS_PORT = 20000;
 
 	private $resource = null;
 
@@ -204,7 +206,15 @@ class LeLogger
 
 	public function getPort()
 	{
-		return $this->port;
+		if ($this->isTLS())
+		{
+			return self::LE_TLS_PORT;
+		}
+		else
+		{
+			return $this->port;
+		}
+
 	}
 	
 	
