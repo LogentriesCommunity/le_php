@@ -32,7 +32,7 @@ class LeLogger
 	 */
 
 	// Logentries server address for receiving logs
-	const LE_ADDRESS = 'tcp://api.logentries.com';
+	const LE_ADDRESS = 'tcp://data.logentries.com';
 	// Logentries server address for receiving logs via TLS
 	const LE_TLS_ADDRESS = 'tls://api.logentries.com';
 
