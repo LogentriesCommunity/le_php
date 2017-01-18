@@ -1,11 +1,37 @@
 language: php
 
+# Added to support travis container infrastructure See http://docs.travis-ci.com/user/migrating-from-legacy/
+sudo: false
+
+# Added caching support to speed up builds!
+cache:
+    directories:
+    - ~/ci-build
+    - node_modules
+
 php:
-  - 5.3
-  - 5.4
-  - 5.5
+    - 5.6
+    - 7.1
+
+env:
+    - WP_VERSION=latest WP_MULTISITE=1
+
+branches:
+ only:
+   - master
+   - dev
+   - develop
+   - qa
+   - staging
+   - ci
 
 before_script:
-  - composer install --dev
+    - bash tests/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION 
 
-script: phpunit
+script:
+   # This script contains all the former testing steps as per changes for caching, modified Feb 2016
+   - /tmp/ci_config/scripts/run_tests.sh
+
+notifications:
+  email:
+    - mjoseph@postmedia.com
