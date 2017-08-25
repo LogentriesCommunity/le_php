@@ -68,11 +68,11 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
+	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $connectionTimeout, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
 	{
 		if ( ! isset(self::$m_instance[$token]))
 		{
-			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp);
+			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $connectionTimeout, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp);
 		}
 
 		return self::$m_instance[$token];
@@ -86,7 +86,7 @@ class LeLogger
 		self::$m_instance = array();
 	}
 
-	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
+	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $connectionTimeout, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
 	{
 
 		if ($datahubEnabled===true)
@@ -154,7 +154,7 @@ class LeLogger
 
 		$this->severity = $severity;
 
-		$this->connectionTimeout = (float) ini_get('default_socket_timeout');
+		$this->connectionTimeout = $connectionTimeout;
 
 		$this->port = $port;
 	}
