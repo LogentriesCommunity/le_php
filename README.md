@@ -1,5 +1,5 @@
-Logging to Logentries with Php [![Build Status](https://travis-ci.org/logentries/le_php.png)](https://travis-ci.org/logentries/le_php)
-=======================================
+# Logging to Logentries with Php [![Build Status](https://travis-ci.org/logentries/le_php.png)](https://travis-ci.org/logentries/le_php)
+
 
 *This plug in will no longer be officially supported or maintained by Logentries.<br>
 If you would be interested in maintaining this project, please contact support@logentries.com.*
