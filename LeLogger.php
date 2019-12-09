@@ -32,11 +32,9 @@ class LeLogger
 	 */
 
 	// Logentries server address for receiving logs
-	const LE_ADDRESS = 'tcp://api.logentries.com';
+	const LE_ADDRESS = 'tcp://data.logentries.com';
 	// Logentries server address for receiving logs via TLS
 	const LE_TLS_ADDRESS = 'tls://api.logentries.com';
-	// Logentries server port for receiving logs by token
-	const LE_PORT = 10000;
 	// Logentries server port for receiving logs with TLS by token
 	const LE_TLS_PORT = 20000;
 
@@ -46,7 +44,8 @@ class LeLogger
 	
 	private $_datahubIPAddress = "";
 	private $use_datahub = false;
-	private $_datahubPort = 10000;
+
+	private $port = false;
 
 	private $use_host_name = false;
 	private $_host_name = "";
@@ -69,11 +68,11 @@ class LeLogger
 	
 	private $errstr;
 
-	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
+	public static function getLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $connectionTimeout, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
 	{
 		if ( ! isset(self::$m_instance[$token]))
 		{
-			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $add_local_timestamp);
+			self::$m_instance[$token] = new LeLogger($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $connectionTimeout, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp);
 		}
 
 		return self::$m_instance[$token];
@@ -87,7 +86,7 @@ class LeLogger
 		self::$m_instance = array();
 	}
 
-	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $datahubPort, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
+	private function __construct($token, $persistent, $ssl, $severity, $datahubEnabled, $datahubIPAddress, $connectionTimeout, $port, $host_id, $host_name, $host_name_enabled, $add_local_timestamp)
 	{
 
 		if ($datahubEnabled===true)
@@ -99,7 +98,6 @@ class LeLogger
 			// set Datahub variable values			
 			$this->_datahubIPAddress = $datahubIPAddress;
 			$this->use_datahub = $datahubEnabled;
-			$this->_datahubPort = $datahubPort;	
 		
 		
 			// if datahub is being used the logToken should be set to null
@@ -156,7 +154,9 @@ class LeLogger
 
 		$this->severity = $severity;
 
-		$this->connectionTimeout = (float) ini_get('default_socket_timeout');
+		$this->connectionTimeout = $connectionTimeout;
+
+		$this->port = $port;
 	}
 
 
@@ -210,14 +210,11 @@ class LeLogger
 		{
 			return self::LE_TLS_PORT;
 		}
-		elseif ($this->isDatahub() )
-		{
-		 	return $this->_datahubPort;
-		}
 		else
 		{
-			return self::LE_PORT;
+			return $this->port;
 		}
+
 	}
 	
 	

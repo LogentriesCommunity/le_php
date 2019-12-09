@@ -82,7 +82,7 @@
 
 			$this->tearDown();
 
-			$log = LeLogger::getLogger('token', true, true, LOG_DEBUG, false, "", 10000, "", "", false, true);
+			$log = LeLogger::getLogger('token', true, true, LOG_DEBUG, false, "", 0, "", "", false, true);
 
 			$this->assertEquals(20000, $log->getPort());
 		}
@@ -91,7 +91,7 @@
 		{
 			$log = LeLogger::getLogger('token', true, false, LOG_DEBUG, false, "", 10000, "", "", false, true);
 
-			$this->assertEquals('tcp://api.logentries.com', $log->getAddress());
+			$this->assertEquals('tcp://data.logentries.com', $log->getAddress());
 
 			$this->tearDown();
 			$log = LeLogger::getLogger('token', true, true, LOG_DEBUG, false, "", 10000, "", "", false, true);
